@@ -6,9 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.arm.ArmTeleopCommand;
 import frc.robot.commands.beak.BeakCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.beak.FlywheelParams;
 import frc.robot.subsystems.beak.FlywheelSubsystem;
 import frc.robot.subsystems.beak.PhotoSensor;
@@ -41,14 +43,19 @@ public class RobotContainer {
   public final FlywheelSubsystem intake;
   public final FlywheelSubsystem shooter;
   public final PhotoSensor photoSensor;
+  public final ArmSubsystem arm;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
+    controller = new CommandXboxController(0);
+
     intake = new FlywheelSubsystem(INTAKE_PARAMS);
     shooter = new FlywheelSubsystem(SHOOTER_PARAMS);
     photoSensor = new PhotoSensor();
-    controller = new CommandXboxController(0);
+
+    arm = new ArmSubsystem();
+    arm.setDefaultCommand(new ArmTeleopCommand(arm, () -> -controller.getLeftY()));
 
     configureBindings();
   }

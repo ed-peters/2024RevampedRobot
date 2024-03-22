@@ -93,10 +93,8 @@ public class FlywheelSubsystem extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {
-        if (sim != null) {
-            sim.update(0.02);
-        }
+    public void simulationPeriodic() {
+        sim.update(0.02);
     }
 
     public Command stopCommand() {

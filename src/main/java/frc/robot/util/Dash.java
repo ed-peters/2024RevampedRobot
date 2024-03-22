@@ -25,6 +25,10 @@ public class Dash {
         builder.addBooleanProperty(key, holder, holder);
     }
 
+    public static void add(SendableBuilder builder, String key, BooleanSupplier getter) {
+        builder.addBooleanProperty(key, getter, null);
+    }
+
     public static void add(SendableBuilder builder, String key, DoubleHolder holder) {
         builder.addDoubleProperty(key, holder, holder);
     }
