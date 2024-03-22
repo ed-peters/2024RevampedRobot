@@ -4,16 +4,18 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.arm.ArmTeleopCommand;
 import frc.robot.commands.beak.BeakCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.swerve.SwerveTeleopCommand;
+import frc.robot.commands.swerve.TurboSniperSpeedSupplier;
 import frc.robot.subsystems.arm.ArmSubsystem;
+import frc.robot.subsystems.auto.AutonomousSubsystem;
 import frc.robot.subsystems.beak.FlywheelParams;
 import frc.robot.subsystems.beak.FlywheelSubsystem;
 import frc.robot.subsystems.beak.PhotoSensor;
+import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -37,13 +39,13 @@ public class RobotContainer {
           16.0 / 25.0,
           (2.78 / 12.0) * Math.PI);
 
-  public static final DigitalInput photoSwitch = new DigitalInput(1);
-
   public final CommandXboxController controller;
   public final FlywheelSubsystem intake;
   public final FlywheelSubsystem shooter;
   public final PhotoSensor photoSensor;
+  public final SwerveDriveSubsystem drive;
   public final ArmSubsystem arm;
+  public final AutonomousSubsystem auto;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -54,8 +56,13 @@ public class RobotContainer {
     shooter = new FlywheelSubsystem(SHOOTER_PARAMS);
     photoSensor = new PhotoSensor();
 
+    drive = new SwerveDriveSubsystem();
+    drive.setDefaultCommand(new SwerveTeleopCommand(drive, new TurboSniperSpeedSupplier(controller)));
+
     arm = new ArmSubsystem();
     arm.setDefaultCommand(new ArmTeleopCommand(arm, () -> -controller.getLeftY()));
+
+    auto = new AutonomousSubsystem(this);
 
     configureBindings();
   }
@@ -72,6 +79,13 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return Commands.print("no autonomous routine");
+    return auto.getAutonomousCommand();
+  }
+
+  public void stopAll() {
+    intake.stop();
+    shooter.stop();
+    arm.stop();
+    drive.stop();
   }
 }

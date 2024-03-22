@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import org.littletonrobotics.junction.LoggedRobot;
 
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends LoggedRobot {
 
   private RobotContainer container;
+  private Command auto;
 
   @Override
   public void robotInit() {
@@ -38,6 +40,9 @@ public class Robot extends LoggedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    container.stopAll();
+    auto = container.getAutonomousCommand();
+    auto.schedule();
   }
 
   /** This function is called periodically during autonomous. */
@@ -46,6 +51,11 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
+    if (auto != null) {
+      auto.cancel();
+      auto = null;
+    }
+    container.stopAll();
   }
 
   /** This function is called periodically during operator control. */
@@ -55,5 +65,11 @@ public class Robot extends LoggedRobot {
   @Override
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
+    container.stopAll();
+  }
+
+  @Override
+  public void disabledInit() {
+    container.stopAll();
   }
 }

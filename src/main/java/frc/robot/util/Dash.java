@@ -2,12 +2,16 @@ package frc.robot.util;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.function.BooleanConsumer;
 import edu.wpi.first.util.sendable.SendableBuilder;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import static com.revrobotics.CANSparkBase.IdleMode;
 
@@ -15,6 +19,10 @@ public class Dash {
 
     public static void add(SendableBuilder builder, String key, DoubleSupplier getter) {
         builder.addDoubleProperty(key, getter, null);
+    }
+
+    public static void add(SendableBuilder builder, String key, DoubleHolder holder) {
+        builder.addDoubleProperty(key, holder, holder);
     }
 
     public static void add(SendableBuilder builder, String key, DoubleSupplier getter, DoubleConsumer setter) {
@@ -29,8 +37,20 @@ public class Dash {
         builder.addBooleanProperty(key, getter, null);
     }
 
-    public static void add(SendableBuilder builder, String key, DoubleHolder holder) {
-        builder.addDoubleProperty(key, holder, holder);
+    public static void add(SendableBuilder builder, String key, Supplier<String> getter) {
+        builder.addStringProperty(key, getter, null);
+    }
+
+    public static void addPose(SendableBuilder builder, String prefix, Supplier<Pose2d> getter) {
+        add(builder, prefix+"/X", () -> getter.get().getY());
+        add(builder, prefix+"/Y", () -> getter.get().getY());
+        add(builder, prefix+"/Omega", () -> getter.get().getRotation().getDegrees());
+    }
+
+    public static void addSpeeds(SendableBuilder builder, String prefix, Supplier<ChassisSpeeds> getter) {
+        add(builder, prefix+"/X", () -> getter.get().vxMetersPerSecond);
+        add(builder, prefix+"/Y", () -> getter.get().vyMetersPerSecond);
+        add(builder, prefix+"/Omega", () -> Units.radiansToDegrees(getter.get().omegaRadiansPerSecond));
     }
 
     public static void add(SendableBuilder builder, CANSparkMax motor) {
