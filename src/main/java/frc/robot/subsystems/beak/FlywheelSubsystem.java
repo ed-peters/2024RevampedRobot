@@ -35,12 +35,12 @@ public class FlywheelSubsystem extends SubsystemBase {
 
         SmartDashboard.putData(params.getSubsystemName(), builder -> {
             if (motor != null) {
-                Dash.addMotor(builder, motor);
+                Dash.add(builder, motor);
                 Dash.addBrake(builder, "BrakeEnabled?", motor);
             }
-            Dash.addDouble(builder, "WheelRpm", this::getWheelRpm);
-            Dash.addDouble(builder, "WheelFps", this::getWheelFps);
-            Dash.addDouble(builder, "LastVoltage", () -> lastVoltage);
+            Dash.add(builder, "WheelRpm", this::getWheelRpm);
+            Dash.add(builder, "WheelFps", this::getWheelFps);
+            Dash.add(builder, "LastVoltage", () -> lastVoltage);
         });
     }
 

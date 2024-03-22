@@ -33,19 +33,19 @@ public class ArmTuningCommand extends Command {
         addRequirements(arm);
 
         SmartDashboard.putData("ArmTuningCommand", builder -> {
-            Dash.addDouble(builder, "Controls/SetpointAngle", setpointAngle);
-            Dash.addDouble(builder, "Controls/SetpointDps", setpointDps);
-            Dash.addBoolean(builder, "Controls/Enabled?", enabled);
-            Dash.addDouble(builder, "Params/kP", pid::getP, pid::setP);
-            Dash.addDouble(builder, "Params/kI", pid::getI, pid::setI);
-            Dash.addDouble(builder, "Params/kD", pid::getD, pid::setD);
-            Dash.addDouble(builder, "Params/kG", () -> feedforward.kg, val -> { feedforward = new ArmFeedforward(0.0, val, feedforward.kv); });
-            Dash.addDouble(builder, "Params/kV", () -> feedforward.kv, val -> { feedforward = new ArmFeedforward(0.0, feedforward.kg, val); });
-            Dash.addDouble(builder, "Output/Feedforward", () -> lastFeedforward);
-            Dash.addDouble(builder, "Output/Pid", () -> lastPid);
-            Dash.addDouble(builder, "Output/Voltage", () -> lastVoltage);
-            Dash.addDouble(builder, "Output/PositionDegrees", arm::getPositionDegrees);
-            Dash.addDouble(builder, "Output/VelocityDps", arm::getVelocityDps);
+            Dash.add(builder, "Controls/SetpointAngle", setpointAngle);
+            Dash.add(builder, "Controls/SetpointDps", setpointDps);
+            Dash.add(builder, "Controls/Enabled?", enabled);
+            Dash.add(builder, "Params/kP", pid::getP, pid::setP);
+            Dash.add(builder, "Params/kI", pid::getI, pid::setI);
+            Dash.add(builder, "Params/kD", pid::getD, pid::setD);
+            Dash.add(builder, "Params/kG", () -> feedforward.kg, val -> { feedforward = new ArmFeedforward(0.0, val, feedforward.kv); });
+            Dash.add(builder, "Params/kV", () -> feedforward.kv, val -> { feedforward = new ArmFeedforward(0.0, feedforward.kg, val); });
+            Dash.add(builder, "Output/Feedforward", () -> lastFeedforward);
+            Dash.add(builder, "Output/Pid", () -> lastPid);
+            Dash.add(builder, "Output/Voltage", () -> lastVoltage);
+            Dash.add(builder, "Output/PositionDegrees", arm::getPositionDegrees);
+            Dash.add(builder, "Output/VelocityDps", arm::getVelocityDps);
         });
     }
 

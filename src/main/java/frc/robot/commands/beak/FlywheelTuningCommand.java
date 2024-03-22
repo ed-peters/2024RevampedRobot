@@ -29,13 +29,13 @@ public class FlywheelTuningCommand extends Command {
         this.feedforward = flywheel.getParams().makeFeedforward();
 
         SmartDashboard.putData(flywheel.getName()+"TuningCommand", builder -> {
-            Dash.addDouble(builder, "Controls/Setpoint", setpoint);
-            Dash.addBoolean(builder, "Controls/Enabled?", enabled);
-            Dash.addDouble(builder, "Params/kP", pid::getP, pid::setP);
-            Dash.addDouble(builder, "Params/kV", () -> feedforward.kv, val -> feedforward = new SimpleMotorFeedforward(0.0, val));
-            Dash.addDouble(builder, "Output/MotorRpm", flywheel::getMotorRpm);
-            Dash.addDouble(builder, "Output/WheelRpm", flywheel::getWheelRpm);
-            Dash.addDouble(builder, "Output/WheelFps", flywheel::getWheelFps);
+            Dash.add(builder, "Controls/Setpoint", setpoint);
+            Dash.add(builder, "Controls/Enabled?", enabled);
+            Dash.add(builder, "Params/kP", pid::getP, pid::setP);
+            Dash.add(builder, "Params/kV", () -> feedforward.kv, val -> feedforward = new SimpleMotorFeedforward(0.0, val));
+            Dash.add(builder, "Output/MotorRpm", flywheel::getMotorRpm);
+            Dash.add(builder, "Output/WheelRpm", flywheel::getWheelRpm);
+            Dash.add(builder, "Output/WheelFps", flywheel::getWheelFps);
         });
     }
 

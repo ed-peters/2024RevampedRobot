@@ -18,7 +18,7 @@ public class PhotoSensor implements BooleanSupplier {
         if (RobotBase.isSimulation()) {
             BooleanHolder sim = new BooleanHolder(false);
             SmartDashboard.putData("PhotoSensor", builder -> {
-                Dash.addBoolean(builder, "Sensor", sim);
+                Dash.add(builder, "Sensor", sim);
             });
             supplier = sim;
         } else {

@@ -13,27 +13,27 @@ import static com.revrobotics.CANSparkBase.IdleMode;
 
 public class Dash {
 
-    public static void addDouble(SendableBuilder builder, String key, DoubleSupplier getter) {
+    public static void add(SendableBuilder builder, String key, DoubleSupplier getter) {
         builder.addDoubleProperty(key, getter, null);
     }
 
-    public static void addDouble(SendableBuilder builder, String key, DoubleSupplier getter, DoubleConsumer setter) {
+    public static void add(SendableBuilder builder, String key, DoubleSupplier getter, DoubleConsumer setter) {
         builder.addDoubleProperty(key, getter, setter);
     }
 
-    public static void addBoolean(SendableBuilder builder, String key, BooleanHolder holder) {
+    public static void add(SendableBuilder builder, String key, BooleanHolder holder) {
         builder.addBooleanProperty(key, holder, holder);
     }
 
-    public static void addDouble(SendableBuilder builder, String key, DoubleHolder holder) {
+    public static void add(SendableBuilder builder, String key, DoubleHolder holder) {
         builder.addDoubleProperty(key, holder, holder);
     }
 
-    public static void addMotor(SendableBuilder builder, CANSparkMax motor) {
-        addMotor(builder, "", motor);
+    public static void add(SendableBuilder builder, CANSparkMax motor) {
+        add(builder, "", motor);
     }
 
-    public static void addMotor(SendableBuilder builder, String prefix, CANSparkMax motor) {
+    public static void add(SendableBuilder builder, String prefix, CANSparkMax motor) {
         RelativeEncoder encoder = motor.getEncoder();
         builder.addDoubleProperty(prefix+"Amps", motor::getOutputCurrent, null);
         builder.addDoubleProperty(prefix+"Volts", () -> motor.getAppliedOutput() * motor.getBusVoltage(), null);

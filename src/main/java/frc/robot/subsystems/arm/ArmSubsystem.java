@@ -35,12 +35,12 @@ public class ArmSubsystem extends SubsystemBase {
         leadEncoder = leadMotor.getEncoder();
 
         SmartDashboard.putData("ArmSubsystem", builder -> {
-            Dash.addMotor(builder, "Leader/", leadMotor);
-            Dash.addMotor(builder, "Follower/", followMotor);
-            Dash.addDouble(builder, "PositionDegrees", this::getPositionDegrees);
-            Dash.addDouble(builder, "VelocityDps", this::getVelocityDps);
-            Dash.addDouble(builder, "VelocityDps", this::getVelocityDps);
-            Dash.addDouble(builder, "LastVoltage", () -> lastVoltage);
+            Dash.add(builder, "Leader/", leadMotor);
+            Dash.add(builder, "Follower/", followMotor);
+            Dash.add(builder, "PositionDegrees", this::getPositionDegrees);
+            Dash.add(builder, "VelocityDps", this::getVelocityDps);
+            Dash.add(builder, "VelocityDps", this::getVelocityDps);
+            Dash.add(builder, "LastVoltage", () -> lastVoltage);
             Dash.addBrake(builder, "BrakeEnabled?", leadMotor, followMotor);
         });
     }
