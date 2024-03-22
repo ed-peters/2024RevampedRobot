@@ -1,0 +1,39 @@
+{
+  "intake": {
+    "canId": 2,
+    "inverted": true,
+    "brakeEnabled": true,
+    "openLoopRampRate": 0.01,
+    "closedLoopRampRate": 0.01,
+    "currentLimit": 40,
+    "kP": 0.0098
+  },
+  "shooter": {
+    "canId": 1,
+    "inverted": false,
+    "brakeEnabled": true,
+    "openLoopRampRate": 0.01,
+    "closedLoopRampRate": 0.01,
+    "currentLimit": 40,
+    "kP": 0.0001
+  },
+  "armLeader": {
+    "canId": 8,
+    "inverted": false,
+    "brakeEnabled": true,
+    "openLoopRampRate": 0.25,
+    "closedLoopRampRate": 0.25,
+    "currentLimit": 30,
+    "kP": 0.018
+  },
+  "armFollower": {
+    "canId": 12,
+    "brakeEnabled": true,
+    "openLoopRampRate": 0.25,
+    "closedLoopRampRate": 0.25,
+    "currentLimit": 30,
+    "kP": 0.018,
+    "leader": "armLeader",
+    "followInverted": true
+  }
+}

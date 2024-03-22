@@ -4,13 +4,14 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.beak.BeakCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.beak.FlywheelParams;
+import frc.robot.subsystems.beak.FlywheelSubsystem;
+import frc.robot.subsystems.beak.PhotoSensor;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -19,36 +20,43 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  public static final FlywheelParams INTAKE_PARAMS = new FlywheelParams(
+          "intake",
+          0.0098,
+          0.0005,
+          12.0 / 56.0,
+          (2.5 / 12.0) * Math.PI);
+
+  public static final FlywheelParams SHOOTER_PARAMS = new FlywheelParams(
+          "shooter",
+          0.0001,
+          0.00399,
+          16.0 / 25.0,
+          (2.78 / 12.0) * Math.PI);
+
+  public static final DigitalInput photoSwitch = new DigitalInput(1);
+
+  public final CommandXboxController controller;
+  public final FlywheelSubsystem intake;
+  public final FlywheelSubsystem shooter;
+  public final PhotoSensor photoSensor;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the trigger bindings
+
+    intake = new FlywheelSubsystem(INTAKE_PARAMS);
+    shooter = new FlywheelSubsystem(SHOOTER_PARAMS);
+    photoSensor = new PhotoSensor();
+    controller = new CommandXboxController(0);
+
     configureBindings();
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    controller.a().onTrue(BeakCommands.shoot(intake, shooter));
+    controller.b().onTrue(BeakCommands.eject(intake, shooter));
+    controller.x().onTrue(BeakCommands.intake(intake, shooter, photoSensor));
   }
 
   /**
@@ -57,7 +65,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return Commands.print("no autonomous routine");
   }
 }
