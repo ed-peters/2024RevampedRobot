@@ -12,6 +12,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 
+/**
+ * Follows a path drawn using Choreo. Includes the options to:
+ *  - Mirror the path to the red side of the field
+ *  - Reset the odometry to the starting pose of the path (for the first path in auto)
+ * 
+ * Code was ripped off from {@link Choreo#choreoSwerveCommand}
+ */
 public class AutonomousPath extends Command {
 
     public static final double KP_TRANS = 1.0;

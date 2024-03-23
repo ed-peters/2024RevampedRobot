@@ -5,6 +5,9 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.beak.FlywheelSubsystem;
 
+/**
+ * Runs a {@link FlywheelSubsystem} at a specific FPS using closed-loop control.
+ */
 public class FlywheelFpsCommand extends Command {
 
     private final FlywheelSubsystem flywheel;

@@ -14,6 +14,9 @@ import frc.robot.util.Dash;
 
 import java.util.function.BooleanSupplier;
 
+/**
+ * Creates an autonomous program
+ */
 public class AutonomousSubsystem {
 
     private final FlywheelSubsystem intake;

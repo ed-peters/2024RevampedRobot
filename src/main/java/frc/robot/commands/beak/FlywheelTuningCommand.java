@@ -9,6 +9,18 @@ import frc.robot.util.BooleanHolder;
 import frc.robot.util.Dash;
 import frc.robot.util.DoubleHolder;
 
+/**
+ * Command for tuning a {@link FlywheelSubsystem}. To use this:
+ *  - Set kV and kP to 0
+ *  - Pick a setpoint, start running, then increase kV until the wheel approaches the setpoint
+ *  - Increase kP until the flywheel starts to oscillate around the setpoint
+ *  - Decrease kP until the oscillation stops
+ * 
+ * Once you're done, copy the values of kV and kP to the correct {@link FlywheelParams} in
+ * the {@link RobotContainer}
+ * 
+ * https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/tuning-flywheel.html
+ */
 public class FlywheelTuningCommand extends Command {
 
     public static final double DEFAULT_KP = 0.0;

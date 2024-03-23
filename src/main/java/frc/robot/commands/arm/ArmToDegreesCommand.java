@@ -10,6 +10,10 @@ import frc.robot.subsystems.arm.ArmSubsystem;
 import static edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import static edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 
+/**
+ * Uses a trapezoid motion profile to move the arm to a specific position. Don't
+ * try to use this until the arm is tuned using the {@link ArmTuningCommand}.
+ */
 public class ArmToDegreesCommand extends Command {
 
     public static final Constraints CONSTRAINTS = new Constraints(45.0, 45.0);

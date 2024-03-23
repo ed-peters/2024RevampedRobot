@@ -9,6 +9,22 @@ import frc.robot.util.BooleanHolder;
 import frc.robot.util.Dash;
 import frc.robot.util.DoubleHolder;
 
+/**
+ * Command for tuning the arm. To use this:
+ *  - Set kG and kV to zero
+ *  - Loop: pick a setpoint (e.g. 45 degrees), hold the arm there, then increase kG until the arm holds still
+ *  - Loop: pick a velocity (e.g. 1 degree/sec), then increase kV until the arm tracks the movement
+ *  - Set kP, kI and kD to zero
+ *  - Loop:
+ *      - Pick a setpoint (e.g. 45 degrees) and hold the arm there, then change the setpoint
+ *      - Increase kP till it moves sharply to the new position
+ *      - Increase kI if the arm gets "stuck" before hitting the new position
+ *      - Increase kD to "help track a moving endpoint and limit oscillation"
+ * 
+ * Once you're done, copy the values of kG, kV, kP, kI and kD to {@link ArmSubsystem}
+ * 
+ * https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/tuning-vertical-arm.html
+ */
 public class ArmTuningCommand extends Command {
 
     private final ArmSubsystem arm;

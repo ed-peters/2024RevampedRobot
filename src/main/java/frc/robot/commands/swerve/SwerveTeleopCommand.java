@@ -10,6 +10,9 @@ import frc.robot.util.Dash;
 
 import java.util.function.Supplier;
 
+/**
+ * Simple teleop for swerve mode
+ */
 public class SwerveTeleopCommand extends Command {
 
     private final SwerveDriveSubsystem drive;

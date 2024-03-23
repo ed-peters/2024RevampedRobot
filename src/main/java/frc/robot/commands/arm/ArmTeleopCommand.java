@@ -6,6 +6,11 @@ import frc.robot.subsystems.arm.ArmSubsystem;
 
 import java.util.function.DoubleSupplier;
 
+/**
+ * Simple teleop control of the arm. We use different max voltage in the upward
+ * and downward directions b/c the arm moves much faster down than up (thanks,
+ * gravity!)
+ */
 public class ArmTeleopCommand extends Command {
 
     public static final double MAX_VOLTS_UP = 7.0;

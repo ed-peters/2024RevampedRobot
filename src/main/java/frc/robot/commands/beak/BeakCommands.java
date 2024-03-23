@@ -6,30 +6,25 @@ import frc.robot.subsystems.beak.FlywheelSubsystem;
 
 import java.util.function.BooleanSupplier;
 
+/**
+ * Compound commands for the intake and shooter:
+ *      - intake (roll intake forward until interrupted)
+ *      - shoot (spin up shooter, then intake)
+ *      - eject (rolls both backwards slowly)
+ */
 public class BeakCommands {
 
+    // tune these for shooting
     public static final double SHOOT_FPS = 300.0;
     public static final double SHOOT_SPINUP_SECS = 0.5;
     public static final double SHOOT_SHOOT_SECS = 0.5;
 
+    // tune this for intake
     public static final double INTAKE_FPS = 1.0;
 
+    // tune this for eject
     public static final double EJECT_FPS = 1.0;
     public static final double EJECT_SECS = 2.0;
-
-    public static Command eject(FlywheelSubsystem intake, FlywheelSubsystem shooter) {
-
-        Command eject = Commands.race(
-                intake.fpsCommand(-EJECT_FPS),
-                shooter.fpsCommand(-EJECT_FPS),
-                Commands.waitSeconds(EJECT_SECS));
-
-        Command stop = Commands.parallel(
-                intake.stopOnceCommand(),
-                shooter.stopOnceCommand());
-
-        return eject.andThen(stop);
-    }
 
     public static Command intake(FlywheelSubsystem intake,
                                  FlywheelSubsystem shooter,
@@ -64,5 +59,19 @@ public class BeakCommands {
                 shooter.stopOnceCommand());
 
         return spinUp.andThen(shoot).andThen(stop);
+    }
+
+    public static Command eject(FlywheelSubsystem intake, FlywheelSubsystem shooter) {
+
+        Command eject = Commands.race(
+                intake.fpsCommand(-EJECT_FPS),
+                shooter.fpsCommand(-EJECT_FPS),
+                Commands.waitSeconds(EJECT_SECS));
+
+        Command stop = Commands.parallel(
+                intake.stopOnceCommand(),
+                shooter.stopOnceCommand());
+
+        return eject.andThen(stop);
     }
 }

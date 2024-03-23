@@ -15,6 +15,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.Dash;
 import frc.robot.util.Motor;
 
+/**
+ * Dual-motor arm system. Includes both "real" and "simulated" modes. Simulated mode
+ * will use a {@link SingleJointedArmSim} to calculate arm movement based on input
+ * voltage.
+ * 
+ * This does NOT implement PID control with the motor controllers - see the various
+ * arm commands for how that's done.
+ */
 public class ArmSubsystem extends SubsystemBase {
 
     public static final double DEFAULT_KP = 0.0;
