@@ -42,9 +42,11 @@ public class Dash {
     }
 
     public static void addPose(SendableBuilder builder, String prefix, Supplier<Pose2d> getter) {
-        add(builder, prefix+"/X", () -> getter.get().getY());
-        add(builder, prefix+"/Y", () -> getter.get().getY());
-        add(builder, prefix+"/Omega", () -> getter.get().getRotation().getDegrees());
+        Supplier<double[]> arrayGetter = () -> {
+            Pose2d pose = getter.get();
+            return new double[]{ pose.getX(), pose.getY() };
+        };
+        builder.addDoubleArrayProperty(prefix, arrayGetter, null);
     }
 
     public static void addSpeeds(SendableBuilder builder, String prefix, Supplier<ChassisSpeeds> getter) {

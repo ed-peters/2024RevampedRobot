@@ -47,9 +47,6 @@
         "open": true
       },
       "SmartDashboard": {
-        "ArmSubsystem": {
-          "open": true
-        },
         "AutonomousSubsystem": {
           "open": true
         },
@@ -57,6 +54,9 @@
           "open": true
         },
         "IntakeSubsystem": {
+          "open": true
+        },
+        "PhotoSensor": {
           "open": true
         },
         "ShooterSubsystem": {

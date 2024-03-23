@@ -1,6 +1,5 @@
 package frc.robot.subsystems.auto;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,9 +9,9 @@ import frc.robot.commands.beak.BeakCommands;
 import frc.robot.subsystems.beak.FlywheelSubsystem;
 import frc.robot.subsystems.beak.PhotoSensor;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
+import frc.robot.util.BooleanHolder;
 import frc.robot.util.Dash;
 
-import java.util.Objects;
 import java.util.function.BooleanSupplier;
 
 public class AutonomousSubsystem {
@@ -21,6 +20,7 @@ public class AutonomousSubsystem {
     private final FlywheelSubsystem shooter;
     private final SwerveDriveSubsystem drive;
     private final PhotoSensor sensor;
+    private final BooleanHolder red;
 
     public AutonomousSubsystem(RobotContainer container) {
 
@@ -28,33 +28,27 @@ public class AutonomousSubsystem {
         shooter = container.shooter;
         drive = container.drive;
         sensor = container.photoSensor;
+        red = new BooleanHolder(false);
 
         SmartDashboard.putData("AutonomousSubsystem", builder -> {
-            Dash.add(builder, "Alliance", () -> Objects.toString(DriverStation.getAlliance()));
+            Dash.add(builder, "Red?", red);
         });
-    }
-
-    private boolean isRedAlliance() {
-        // Alliance alliance = DriverStation.getAlliance().orElse(null);
-        // return alliance == Alliance.Red;
-        return false;
     }
 
     public Command getAutonomousCommand() {
 
-        AutonomousPath north = new AutonomousPath(drive, "QuadShotNorth", isRedAlliance());
-//        AutonomousPath middle = new AutonomousPath(drive, "QuadShotMiddle", isRedAlliance());
-//        AutonomousPath south = new AutonomousPath(drive, "QuadShotSouth", isRedAlliance());
+        AutonomousPath middle = new AutonomousPath(drive, "QuadShotMiddle", red.getAsBoolean());
+        AutonomousPath south = new AutonomousPath(drive, "QuadShotSouth", red.getAsBoolean());
+        AutonomousPath north = new AutonomousPath(drive, "QuadShotNorth", red.getAsBoolean());
+        north.useForInitialPose();
 
         return Commands.sequence(
                 shoot(),
                 Commands.parallel(north, intake()),
-                shoot()
-                // Commands.parallel(drive(middle), intake()),
-                // shoot(),
-                // Commands.parallel(drive(south), intake()),
-                // shoot());
-        );
+                shoot(),
+                middle,
+                shoot(),
+                south);
     }
 
     private Command intake() {
@@ -63,6 +57,8 @@ public class AutonomousSubsystem {
     }
 
     private Command shoot() {
-        return BeakCommands.shoot(intake, shooter);
+        return Commands.race(
+                BeakCommands.shoot(intake, shooter),
+                drive.stopCommand());
     }
 }

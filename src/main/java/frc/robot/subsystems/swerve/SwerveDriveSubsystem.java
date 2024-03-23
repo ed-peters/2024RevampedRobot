@@ -4,9 +4,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -36,13 +36,13 @@ public class SwerveDriveSubsystem extends SubsystemBase {
             6.75);
 
     private final SwerveDrive drive;
-    private int poseResetCount;
+    private final Field2d field;
 
     public SwerveDriveSubsystem() {
 
         File dir = new File(Filesystem.getDeployDirectory(), "swerve");
 
-        SwerveDriveTelemetry.verbosity = TelemetryVerbosity.NONE;
+        SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
         try {
             drive = new SwerveParser(dir).createSwerveDrive(MAX_SPEED);
         } catch (Exception e) {
@@ -55,9 +55,11 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         // Cosine compensation disabled for simulations since it causes discrepancies not seen in real life
         drive.setCosineCompensator(!SwerveDriveTelemetry.isSimulation);
 
+        field = new Field2d();
+
+        SmartDashboard.putData("Field", field);
         SmartDashboard.putData("SwerveDriveSubsystem", builder -> {
-            Dash.addPose(builder, "Pose/", this::getPose);
-            Dash.add(builder, "ResetCount", () -> poseResetCount);
+            Dash.addPose(builder, "Pose", this::getPose);
         });
     }
 
@@ -83,7 +85,11 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     public void resetOdometry(Pose2d pose) {
         drive.resetOdometry(pose);
-        poseResetCount += 1;
+    }
+
+    @Override
+    public void periodic() {
+        field.getRobotObject().setPose(getPose());
     }
 
     // ================================================================
@@ -102,10 +108,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         return drive.getRobotVelocity();
     }
 
-    public void stop() {
-        setChassisSpeeds(STOP);
-    }
-
     public void driveFieldRelative(ChassisSpeeds speeds) {
         drive.driveFieldOriented(speeds);
     }
@@ -119,8 +121,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         drive.setChassisSpeeds(chassisSpeeds);
     }
 
-    public void postTrajectory(Trajectory trajectory) {
-        drive.postTrajectory(trajectory);
+    public void stop() {
+        setChassisSpeeds(STOP);
+    }
+
+    public Command stopCommand() {
+        return run(this::stop);
     }
 
     // ================================================================
